@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { UsersService } from 'src/app/services/users.service';
@@ -8,30 +9,42 @@ import { UsersService } from 'src/app/services/users.service';
   selector: 'app-login',
   templateUrl: './login.component.html',
 })
-export class LoginComponent {
-  form: FormGroup;
+export class LoginComponent implements OnInit {
+  form!: FormGroup;
 
-  userService = inject(UsersService)
-  router = inject(Router)
-  title = inject(Title)
+  userService = inject(UsersService);
+  router = inject(Router);
+  title = inject(Title);
+  submited = false;
 
-  constructor() {
-    this.form = new FormGroup({
-      email: new FormControl(),
-      password: new FormControl(),
-    })
+  constructor(private formBuilder: FormBuilder) {
+    this.title.setTitle('Traductor LSB - Inicio de sesión');
+  }
 
-    this.title.setTitle("Traductor LSB - Inicio de sesión");
+  ngOnInit(): void {
+    this.form = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
+    });
   }
 
   async onSubmit() {
-    console.log(this.form.value)
-    return;
-    const res = await this.userService.login(this.form.value);
-    if (!res.error) {
-      localStorage.setItem('token', res.user.token)
-      this.router.navigate(['/'])
+    try {
+      this.submited = true;
+      if (!this.form.valid) return;
+
+      const res = await this.userService.login(this.form.value);
+      localStorage.setItem('token', res.data.token);
+      this.router.navigate(['./']);
+    } catch (error) {
+      if (error instanceof HttpErrorResponse)
+        console.log('Error al momento de iniciar sesión: ', error.error);
     }
-    console.log(res);
+  }
+
+  isValidInput(name: string, field: string) {
+    const errors = this.form.get(name)?.errors;
+    if (errors) return errors[field];
+    return false;
   }
 }

@@ -10,7 +10,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       useExisting: forwardRef(() => TextfieldComponent),
       multi: true,
     },
-  ]
+  ],
 })
 export class TextfieldComponent implements OnInit, ControlValueAccessor {
   value: any = false;
@@ -18,13 +18,12 @@ export class TextfieldComponent implements OnInit, ControlValueAccessor {
 
   @Input() type: string = 'text';
   @Input() name: string = '';
-  @Input() isRequired: boolean = false;
-  @Input() label: string = '';
+  @Input() label: string = 'NO-LABEL';
+  @Input() isInvalid: boolean = false;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   writeValue(obj: any): void {
     this.value = obj ? obj : '';
@@ -42,8 +41,8 @@ export class TextfieldComponent implements OnInit, ControlValueAccessor {
     this.isDisabled = isDisabled;
   }
 
-  onChange(_: any): void { }
-  onTouched(): void { }
+  onChange(_: any): void {}
+  onTouched(): void {}
   onInput(value: any) {
     if (value != null) {
       this.value = value.target.value;

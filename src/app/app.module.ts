@@ -8,6 +8,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/users/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { TextfieldComponent } from './components/shared/textfield/textfield.component';
+import { MenuComponent } from './components/shared/menu/menu.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -15,10 +17,12 @@ import { TextfieldComponent } from './components/shared/textfield/textfield.comp
     LoginComponent,
     HomeComponent,
     TextfieldComponent,
+    MenuComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    RouterModule,
     ReactiveFormsModule,
     HttpClientModule,
   ],
