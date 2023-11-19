@@ -6,19 +6,30 @@ export interface Response<T> {
 
 export interface User {
   email: string;
-  firstName: string;
-  firstSurname: string;
+  first_name: string;
+  first_surname: string;
   id: number;
   password: string;
   permissions: Permissions;
   role: number;
-  secondName: string;
-  secondSurname: string;
+  second_name: string;
+  second_surname: string;
   state: string;
   token: string;
 }
 
-export interface Permissions {
-  usuarios: string[];
-  words: string[];
-}
+type permission = 'roles' | 'usuarios' | 'words';
+
+export type Permissions = {
+  [key in permission]: string[];
+};
+
+// roles:    string[];
+// usuarios: string[];
+// words:    string[];
+//
+// export interface Permissions {
+//   usuarios: string[];
+//   words: string[];
+// }
+//

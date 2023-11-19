@@ -1,0 +1,138 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="form" class="flex flex-col gap-4">
+  <div class="flex-1">
+    <div class="flex gap-4">
+      <div class="flex-1">
+        <app-textfield
+          [isInvalid]="
+            submited &&
+            form.controls['first_name'].touched &&
+            form.controls['first_name'].errors != null
+          "
+          name="first_name"
+          type="text"
+          label="Primer nombre"
+          formControlName="first_name"
+        ></app-textfield>
+        <small
+          *ngIf="isValidInput('first_name', 'required')"
+          class="text-red-500"
+          >* El primer nombre es requerido
+        </small>
+      </div>
+      <app-textfield
+        class="flex-1"
+        [isInvalid]="false"
+        name="second_name"
+        type="text"
+        label="Segundo nombre"
+        formControlName="second_name"
+      ></app-textfield>
+    </div>
+    <div class="flex gap-4">
+      <div class="flex-1">
+        <app-textfield
+          [isInvalid]="
+            submited &&
+            form.controls['first_surname'].touched &&
+            form.controls['first_surname'].errors != null
+          "
+          name="first_surname"
+          type="text"
+          label="Apellido paterno"
+          formControlName="first_surname"
+        ></app-textfield>
+        <small
+          *ngIf="isValidInput('first_surname', 'required')"
+          class="text-red-500"
+          >* El primero apellido es requerido
+        </small>
+      </div>
+      <div class="flex-1">
+        <app-textfield
+          [isInvalid]="
+            submited &&
+            form.controls['second_surname'].touched &&
+            form.controls['second_surname'].errors != null
+          "
+          name="second_surname"
+          type="text"
+          label="Apellido materno"
+          formControlName="second_surname"
+        ></app-textfield>
+        <small
+          *ngIf="isValidInput('second_surname', 'required')"
+          class="text-red-500"
+          >* El apellido materno es requerido
+        </small>
+      </div>
+    </div>
+
+    <div>
+      <div class="flex-1">
+        <app-textfield
+          [isInvalid]="
+            submited &&
+            form.controls['email'].touched &&
+            form.controls['email'].errors != null
+          "
+          name="email"
+          type="text"
+          label="Correo Electrónico"
+          formControlName="email"
+        ></app-textfield>
+        <small *ngIf="isValidInput('email', 'email')" class="text-red-500"
+          >* El correo no es válido
+        </small>
+        <small *ngIf="isValidInput('email', 'required')" class="text-red-500"
+          >* El correo electrónico requerido
+        </small>
+      </div>
+
+      <label for="role">
+        Selecciona un rol:
+        <select id="role" name="role" formControlName="role">
+          <option value="1">Admin</option>
+        </select>
+      </label>
+
+      <div class="inline-flex items-center">
+        <div class="relative inline-block h-4 w-8 cursor-pointer rounded-full">
+          <input
+            id="auto-update"
+            type="checkbox"
+            name="state"
+            class="peer absolute h-4 w-8 cursor-pointer appearance-none rounded-full bg-black transition-colors duration-300 checked:bg-blue-600 peer-checked:border-blue-600 peer-checked:before:bg-blue-600"
+            formControlName="state"
+          />
+          <label
+            for="auto-update"
+            class="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-blue-600 peer-checked:before:bg-blue-600"
+          >
+            <div
+              class="top-2/4 left-2/4 inline-block -translate-x-2/4 -translate-y-2/4 rounded-full p-5"
+              data-ripple-dark="true"
+            ></div>
+          </label>
+        </div>
+        <label
+          *ngIf="form.get('state')!.value"
+          for="auto-update"
+          class="mt-px ml-3 mb-0 cursor-pointer select-none font-light text-gray-700"
+        >
+          Activado
+        </label>
+
+        <label
+          *ngIf="!form.get('state')!.value"
+          for="auto-update"
+          class="mt-px ml-3 mb-0 cursor-pointer select-none font-light text-gray-700"
+        >
+          Desactivado
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-row-reverse px-6">
+    <button class="" type="submit">Guardar cambios</button>
+  </div>
+</form>

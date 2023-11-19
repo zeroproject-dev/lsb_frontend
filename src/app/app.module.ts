@@ -10,6 +10,13 @@ import { HomeComponent } from './components/home/home.component';
 import { TextfieldComponent } from './components/shared/textfield/textfield.component';
 import { MenuComponent } from './components/shared/menu/menu.component';
 import { RouterModule } from '@angular/router';
+import { UsersComponent } from './components/users/users/users.component';
+import { RolesComponent } from './components/roles/roles.component';
+import { UserCardComponent } from './components/users/user-card/user-card.component';
+import { FormCreateUserComponent } from './components/users/form-create-user/form-create-user.component';
+import { DictionaryComponent } from './components/dictionary/dictionary.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -18,6 +25,11 @@ import { RouterModule } from '@angular/router';
     HomeComponent,
     TextfieldComponent,
     MenuComponent,
+    UsersComponent,
+    RolesComponent,
+    UserCardComponent,
+    FormCreateUserComponent,
+    DictionaryComponent,
   ],
   imports: [
     BrowserModule,
@@ -25,8 +37,10 @@ import { RouterModule } from '@angular/router';
     RouterModule,
     ReactiveFormsModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

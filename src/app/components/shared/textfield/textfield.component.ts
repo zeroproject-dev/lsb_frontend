@@ -26,7 +26,7 @@ export class TextfieldComponent implements OnInit, ControlValueAccessor {
   ngOnInit(): void {}
 
   writeValue(obj: any): void {
-    this.value = obj ? obj : '';
+    this.value = obj ?? '';
   }
 
   registerOnChange(fn: any): void {
@@ -41,7 +41,9 @@ export class TextfieldComponent implements OnInit, ControlValueAccessor {
     this.isDisabled = isDisabled;
   }
 
-  onChange(_: any): void {}
+  onChange(a: any): void {
+    console.log(a);
+  }
   onTouched(): void {}
   onInput(value: any) {
     if (value != null) {

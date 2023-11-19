@@ -3,7 +3,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { UsersService } from 'src/app/services/users.service';
+import { TOKEN_STORAGE_KEY } from 'src/app/utils/constants';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +17,7 @@ export class LoginComponent implements OnInit {
   userService = inject(UsersService);
   router = inject(Router);
   title = inject(Title);
+  toast = inject(ToastrService);
   submited = false;
 
   constructor(private formBuilder: FormBuilder) {
@@ -34,11 +37,12 @@ export class LoginComponent implements OnInit {
       if (!this.form.valid) return;
 
       const res = await this.userService.login(this.form.value);
-      localStorage.setItem('token', res.data.token);
+      localStorage.setItem(TOKEN_STORAGE_KEY, res.data.token);
       this.router.navigate(['./']);
     } catch (error) {
-      if (error instanceof HttpErrorResponse)
-        console.log('Error al momento de iniciar sesión: ', error.error);
+      if (error instanceof HttpErrorResponse) {
+        this.toast.error(error.error['message'], 'Error');
+      }
     }
   }
 

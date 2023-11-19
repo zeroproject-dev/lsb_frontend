@@ -1,9 +1,7 @@
 <div>
-  <label
-    for="{{ name }}"
-    class="block text-sm font-medium leading-6 text-gray-900"
-    >{{ label }}</label
-  >
+  <label for="{{ name }}" class="block font-medium leading-6 text-gray-900">{{
+    label
+  }}</label>
   <div class="mt-2">
     <input
       id="{{ name }}"
@@ -13,6 +11,7 @@
       [class.border-red-500]="isInvalid"
       [ngClass]="{ 'border-red-500': isInvalid }"
       (input)="onInput($event)"
+      [defaultValue]="value"
     />
   </div>
 </div>
