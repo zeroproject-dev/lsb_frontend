@@ -13,7 +13,7 @@ export class RolesService {
   private baseUrl;
 
   constructor() {
-    this.baseUrl = 'https://api.traductorlsb.com/api/v1';
+    this.baseUrl = 'http://18.231.27.17:3300/api/v1';
   }
 
   listRoles(search: string) {
