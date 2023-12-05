@@ -13,7 +13,7 @@ export class TrainService {
   http = inject(HttpClient);
 
   constructor() {
-    this.baseUrl = 'http://localhost:3300/api/v1';
+    this.baseUrl = 'https://api.traductorlsb.com/api/v1';
   }
 
   train() {

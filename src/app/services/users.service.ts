@@ -14,7 +14,7 @@ export class UsersService {
   private httpClient = inject(HttpClient);
 
   constructor() {
-    this.baseUrl = 'http://localhost:3300/api/v1';
+    this.baseUrl = 'https://api.traductorlsb.com/api/v1';
 
     const token = localStorage.getItem(TOKEN_STORAGE_KEY);
     this.isLoged = token !== null;

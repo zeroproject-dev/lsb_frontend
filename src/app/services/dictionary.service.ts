@@ -14,7 +14,7 @@ export class DictionaryService {
   private baseUrl;
 
   constructor() {
-    this.baseUrl = 'http://localhost:3300/api/v1';
+    this.baseUrl = 'https://api.traductorlsb.com/api/v1';
   }
 
   listOfWords(search: string = ''): Promise<Response<Word[]>> {
