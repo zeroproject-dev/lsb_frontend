@@ -1,0 +1,9 @@
+version: "3.1"
+
+services:
+  front:
+    container_name: lsb-front
+    build:
+      context: .
+    ports:
+      - 8080:80
