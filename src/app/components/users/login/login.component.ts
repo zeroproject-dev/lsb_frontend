@@ -37,7 +37,12 @@ export class LoginComponent implements OnInit {
       if (!this.form.valid) return;
 
       const res = await this.userService.login(this.form.value);
+      if (res.data === null) {
+        this.toast.error(res.message, 'Error');
+        return;
+      }
       localStorage.setItem(TOKEN_STORAGE_KEY, res.data.token);
+      this.userService.setIsLoged(true);
       this.router.navigate(['./']);
     } catch (error) {
       if (error instanceof HttpErrorResponse) {

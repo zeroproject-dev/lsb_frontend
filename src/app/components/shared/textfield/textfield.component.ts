@@ -20,6 +20,7 @@ export class TextfieldComponent implements OnInit, ControlValueAccessor {
   @Input() name: string = '';
   @Input() label: string = 'NO-LABEL';
   @Input() isInvalid: boolean = false;
+  @Input() readonly: boolean = false;
 
   constructor() {}
 
@@ -42,8 +43,9 @@ export class TextfieldComponent implements OnInit, ControlValueAccessor {
   }
 
   onChange(a: any): void {
-    console.log(a);
+    // console.log(this.label + ' onChange: ', a);
   }
+
   onTouched(): void {}
   onInput(value: any) {
     if (value != null) {

@@ -1,0 +1,37 @@
+<main class="min-h-screen flex flex-col">
+  <app-menu></app-menu>
+  <section class="w-full text-center">
+    <h2 class="text-5xl font-bold">{{ status }}</h2>
+    <button
+      (click)="startTraining()"
+      [disabled]="training"
+      class="my-4 py-4 px-6 bg-blue-600 hover:bg-blue-800 text-sm text-gray-50 font-bold rounded-xl transition duration-200 max-w-sm disabled:hover:bg-gray-500 disabled:bg-gray-500"
+    >
+      Empezar entrenamiento para nueva versión
+    </button>
+  </section>
+  <section class="w-full text-center">
+    <h3 class="text-4xl font-bold my-6">Actualizar servicio</h3>
+    <form
+      [formGroup]="form"
+      (submit)="onSubmit()"
+      class="flex gap-4 justify-center mt-2"
+    >
+      <app-textfield
+        [isInvalid]="false"
+        label="Dirección del servicio:"
+        type="text"
+        name="host"
+        formControlName="host"
+        class="w-80"
+      ></app-textfield>
+
+      <button
+        type="submit"
+        class="my-4 py-4 px-6 bg-blue-600 hover:bg-blue-800 text-sm text-gray-50 font-bold rounded-xl transition duration-200 max-w-sm"
+      >
+        Actualizar servicio
+      </button>
+    </form>
+  </section>
+</main>

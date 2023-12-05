@@ -5,120 +5,40 @@
       <h1 class="text-center text-xl font-bold mb-4">
         Administración de roles
       </h1>
-      <form
-        *ngIf="!isLoading"
-        [formGroup]="form"
-        class="flex flex-col gap-4"
-        (ngSubmit)="onSubmit()"
-      >
-        <app-textfield
-          [isInvalid]="false"
-          name="name"
-          type="text"
-          label="Nombre del rol"
-          formControlName="name"
-        ></app-textfield>
-
-        <div class="flex flex-col gap-2">
-          <label for="description"> Descripción: </label>
-          <textarea
-            class="pl-2"
-            formControlName="description"
-            rows="4"
-          ></textarea>
-        </div>
-
-        <div class="inline-flex items-center">
-          <div
-            class="relative inline-block h-4 w-8 cursor-pointer rounded-full"
-          >
-            <input
-              id="auto-update"
-              type="checkbox"
-              name="state"
-              class="peer absolute h-4 w-8 cursor-pointer appearance-none rounded-full bg-black transition-colors duration-300 checked:bg-blue-600 peer-checked:border-blue-600 peer-checked:before:bg-blue-600"
-              formControlName="state"
-            />
-            <label
-              for="auto-update"
-              class="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-blue-600 peer-checked:before:bg-blue-600"
-            >
-              <div
-                class="top-2/4 left-2/4 inline-block -translate-x-2/4 -translate-y-2/4 rounded-full p-5"
-                data-ripple-dark="true"
-              ></div>
-            </label>
-          </div>
-          <label
-            *ngIf="form.get('state')!.value"
-            for="auto-update"
-            class="mt-px ml-3 mb-0 cursor-pointer select-none font-light text-gray-700"
-          >
-            Activado
-          </label>
-
-          <label
-            *ngIf="!form.get('state')!.value"
-            for="auto-update"
-            class="mt-px ml-3 mb-0 cursor-pointer select-none font-light text-gray-700"
-          >
-            Desactivado
-          </label>
-        </div>
-
-        <div class="flex w-full justify-evenly">
-          <div>
-            <h3>Roles</h3>
-            <div formArrayName="roles">
-              <div *ngFor="let role of permissions.roles; let i = index">
-                <label>
-                  <input type="checkbox" [formControlName]="i" /> {{ role }}
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <h3>Usuarios</h3>
-            <div formArrayName="usuarios">
-              <div *ngFor="let usuario of permissions.usuarios; let i = index">
-                <label>
-                  <input type="checkbox" [formControlName]="i" /> {{ usuario }}
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <h3>Palabras</h3>
-            <div formArrayName="words">
-              <div *ngFor="let word of permissions.words; let i = index">
-                <label>
-                  <input type="checkbox" [formControlName]="i" /> {{ word }}
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex justify-between px-6">
-          <button class="invisible" type="button">Deshabiltar rol</button>
-          <button type="submit">Guardar cambios</button>
-        </div>
-      </form>
+      <app-form-role
+        *ngIf="!isLoading && !showModal"
+        [role]="selectedRole"
+        (onSubmitEmitter)="onSubmit($event)"
+      ></app-form-role>
     </section>
     <section class="w-80 flex flex-col">
       <div class="flex-1">
         <input
+          (input)="onSearchInputChange($event)"
           id="search"
           name="search"
           type="text"
           placeholder="Buscar Rol"
           class="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
         />
-        <div class="overflow-y-auto max-h-[calc(100vh-210px)]"></div>
+        <div
+          *ngFor="let role of _listOfRoles; let idx = index"
+          class="overflow-y-auto max-h-[calc(100vh-210px)]"
+        >
+          <button
+            (click)="selectRole(role)"
+            class="py-2 hover:bg-gray-300 w-full text-left rounded pl-2"
+          >
+            <div>
+              <span>{{ role.name }}</span>
+            </div>
+            <p>{{ role.description }}</p>
+            <hr />
+          </button>
+        </div>
       </div>
       <button
+        (click)="openModal()"
         type="button"
         class="my-4 py-4 px-6 bg-blue-600 hover:bg-blue-800 text-sm text-gray-50 font-bold rounded-xl transition duration-200"
       >
@@ -127,3 +47,11 @@
     </section>
   </div>
 </main>
+
+<app-modal
+  [showModal]="showModal"
+  title="Crear nuevo rol"
+  (closeModal)="closeModal()"
+>
+  <app-form-role (onSubmitEmitter)="onSubmitCreate($event)"></app-form-role>
+</app-modal>

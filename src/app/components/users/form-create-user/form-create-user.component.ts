@@ -9,7 +9,8 @@ import {
   inject,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { User } from 'src/app/models/user';
+import { Role, User } from 'src/app/models/user';
+import { RolesService } from 'src/app/services/roles.service';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -24,11 +25,30 @@ export class FormCreateUserComponent implements OnInit, OnChanges {
   userService = inject(UsersService);
   submited: boolean = false;
 
-  constructor(private formBuilder: FormBuilder) {}
+  roles!: Role[];
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private rolesService: RolesService,
+  ) {}
+
+  async updateListOfRoles() {
+    try {
+      const res = await this.rolesService.listRoles('');
+      if (res.data === null) throw new Error(res.message);
+
+      this.roles = res.data;
+    } catch (error: any) {
+      // this.toast.error(error.message, 'Error');
+      console.log(error.message);
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     const { id, password, ...rest } = changes['user']['currentValue'] as User;
-    if (this.form) this.form.setValue(rest);
+    if (!this.form) return;
+
+    this.form.patchValue(rest);
   }
 
   async ngOnInit() {
@@ -41,11 +61,18 @@ export class FormCreateUserComponent implements OnInit, OnChanges {
       role: [this.user?.role ?? 1, [Validators.required]],
       state: [this.user?.state == 'active' ?? true, [Validators.required]],
     });
+
+    await this.updateListOfRoles();
   }
 
   async onSubmit() {
     try {
-      if (this.form.valid) this.onSubmitEmitter.emit(this.form.value);
+      if (this.form.valid) {
+        const formData = this.form.value;
+        if (this.user !== null) formData['id'] = this.user.id;
+        this.onSubmitEmitter.emit(formData);
+        this.form.reset();
+      }
       this.submited = true;
     } catch (error) {
       console.error(error);

@@ -1,7 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
-import { Permissions } from 'src/app/models/user';
+import { ToastrService } from 'ngx-toastr';
+import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { Role } from 'src/app/models/user';
 import { RolesService } from 'src/app/services/roles.service';
 
 @Component({
@@ -9,64 +10,77 @@ import { RolesService } from 'src/app/services/roles.service';
   templateUrl: './roles.component.html',
 })
 export class RolesComponent implements OnInit {
-  form!: FormGroup;
-  permissions!: Permissions;
+  _listOfRoles!: Role[];
+  selectedRole: Role | null = null;
+  showModal: boolean = false;
 
   isLoading = true;
 
   title = inject(Title);
+  toast = inject(ToastrService);
   rolesService = inject(RolesService);
 
-  constructor(private formBuilder: FormBuilder) {
+  private searchSubject = new Subject<string>();
+
+  constructor() {
     this.title.setTitle('LSB - Roles');
   }
 
   async ngOnInit(): Promise<void> {
-    this.form = this.formBuilder.group({
-      name: ['', Validators.required],
-      description: ['', []],
-      state: [true, Validators.required],
-      usuarios: this.formBuilder.array([]),
-      roles: this.formBuilder.array([]),
-      words: this.formBuilder.array([]),
-    });
+    await this.listOfRoles();
 
-    await this.listOfPermissions();
-    this.permissions.roles.forEach(() =>
-      this.roles.push(this.formBuilder.control(false)),
-    );
-    this.permissions.usuarios.forEach(() =>
-      this.usuarios.push(this.formBuilder.control(false)),
-    );
-    this.permissions.words.forEach(() =>
-      this.words.push(this.formBuilder.control(false)),
-    );
+    this.searchSubject
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((query: string) => this.rolesService.listRoles(query)),
+      )
+      .subscribe((obj) => {
+        this._listOfRoles = obj.data ?? [];
+      });
   }
 
-  get roles() {
-    return this.form.get('roles') as any;
+  onSearchInputChange(event: any) {
+    const searchTerm = event.target.value;
+    this.searchSubject.next(searchTerm);
   }
 
-  get usuarios() {
-    return this.form.get('usuarios') as any;
+  selectRole(role: Role) {
+    this.selectedRole = role;
   }
 
-  get words() {
-    return this.form.get('words') as any;
-  }
-
-  async listOfPermissions() {
+  async listOfRoles() {
     try {
-      const res = await this.rolesService.listOfPermissions();
+      const res = await this.rolesService.listRoles('');
+      if (res.data === null) {
+        return;
+      }
+      this._listOfRoles = res.data;
+      this.selectRole(this._listOfRoles[0]);
       this.isLoading = false;
-      this.permissions = res.data;
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   }
 
-  async onSubmit() {
-    // console.log(this.rolesService.createRole(this.form.value));
-    console.log(JSON.stringify(this.form.value));
+  openModal() {
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
+  }
+
+  async onSubmit(formValue: any) {
+    const res = await this.rolesService.updateRole({
+      ...formValue,
+      id: this.selectedRole?.id,
+    });
+
+    this.toast.success(res.message, 'Modificación correcta');
+  }
+
+  async onSubmitCreate(formValue: any) {
+    console.log(await this.rolesService.createRole(formValue));
   }
 }

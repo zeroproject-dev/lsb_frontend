@@ -1,7 +1,7 @@
 export interface Response<T> {
   success: boolean;
   message: string;
-  data: T;
+  data: T | null;
 }
 
 export interface User {
@@ -23,6 +23,14 @@ type permission = 'roles' | 'usuarios' | 'words';
 export type Permissions = {
   [key in permission]: string[];
 };
+
+export interface Role {
+  id: number;
+  name: string;
+  description: string;
+  state: string;
+  permissions: Permissions;
+}
 
 // roles:    string[];
 // usuarios: string[];

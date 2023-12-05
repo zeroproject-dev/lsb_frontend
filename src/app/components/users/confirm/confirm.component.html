@@ -1,0 +1,134 @@
+<div class="flex items-center justify-center min-h-screen">
+  <form
+    (ngSubmit)="onSubmit()"
+    [formGroup]="form"
+    class="mx-auto p-6 bg-white shadow-md rounded-md"
+  >
+    <div class="flex-1">
+      <div class="flex gap-4">
+        <div class="flex-1">
+          <app-textfield
+            [isInvalid]="
+              submited &&
+              form.controls['first_name'].touched &&
+              form.controls['first_name'].errors != null
+            "
+            name="first_name"
+            type="text"
+            label="Primer nombre"
+            formControlName="first_name"
+            [readonly]="true"
+          ></app-textfield>
+          <small
+            *ngIf="isValidInput('first_name', 'required')"
+            class="text-red-500"
+          >
+            * El primer nombre es requerido
+          </small>
+        </div>
+        <app-textfield
+          class="flex-1"
+          [isInvalid]="false"
+          name="second_name"
+          type="text"
+          label="Segundo nombre"
+          formControlName="second_name"
+          [readonly]="true"
+        ></app-textfield>
+      </div>
+      <div class="flex gap-4">
+        <div class="flex-1">
+          <app-textfield
+            [isInvalid]="
+              submited &&
+              form.controls['first_surname'].touched &&
+              form.controls['first_surname'].errors != null
+            "
+            name="first_surname"
+            type="text"
+            label="Apellido paterno"
+            formControlName="first_surname"
+            [readonly]="true"
+          ></app-textfield>
+          <small
+            *ngIf="isValidInput('first_surname', 'required')"
+            class="text-red-500"
+          >
+            * El apellido paterno es requerido
+          </small>
+        </div>
+        <div class="flex-1">
+          <app-textfield
+            [isInvalid]="
+              submited &&
+              form.controls['second_surname'].touched &&
+              form.controls['second_surname'].errors != null
+            "
+            name="second_surname"
+            type="text"
+            label="Apellido materno"
+            formControlName="second_surname"
+            [readonly]="true"
+          ></app-textfield>
+          <small
+            *ngIf="isValidInput('second_surname', 'required')"
+            class="text-red-500"
+          >
+            * El apellido materno es requerido
+          </small>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex-1">
+          <app-textfield
+            [isInvalid]="
+              submited &&
+              form.controls['email'].touched &&
+              form.controls['email'].errors != null
+            "
+            name="email"
+            type="text"
+            label="Correo Electrónico"
+            formControlName="email"
+            [readonly]="true"
+          ></app-textfield>
+          <small *ngIf="isValidInput('email', 'email')" class="text-red-500">
+            * El correo no es válido
+          </small>
+          <small *ngIf="isValidInput('email', 'required')" class="text-red-500">
+            * El correo electrónico requerido
+          </small>
+        </div>
+
+        <div>
+          <app-textfield
+            [isInvalid]="
+              submited &&
+              form.controls['password'].touched &&
+              form.controls['password'].errors != null
+            "
+            name="password"
+            type="password"
+            label="Contraseña"
+            formControlName="password"
+          ></app-textfield>
+          <small
+            *ngIf="isValidInput('password', 'required')"
+            class="text-red-500"
+          >
+            * La contraseña es obligatoria
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-row-reverse px-6 mt-4">
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
+        type="submit"
+      >
+        Guardar cambios
+      </button>
+    </div>
+  </form>
+</div>

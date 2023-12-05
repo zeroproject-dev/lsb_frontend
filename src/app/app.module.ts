@@ -17,6 +17,11 @@ import { FormCreateUserComponent } from './components/users/form-create-user/for
 import { DictionaryComponent } from './components/dictionary/dictionary.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { ModalComponent } from './components/shared/modal/modal.component';
+import { FormRoleComponent } from './components/roles/form-role/form-role.component';
+import { TrainingComponent } from './components/training/training.component';
+import { FormWordComponent } from './components/dictionary/form-word/form-word.component';
+import { ConfirmComponent } from './components/users/confirm/confirm.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +35,11 @@ import { ToastrModule } from 'ngx-toastr';
     UserCardComponent,
     FormCreateUserComponent,
     DictionaryComponent,
+    ModalComponent,
+    FormRoleComponent,
+    TrainingComponent,
+    FormWordComponent,
+    ConfirmComponent,
   ],
   imports: [
     BrowserModule,

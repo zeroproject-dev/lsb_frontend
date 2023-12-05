@@ -9,6 +9,7 @@
     <section class="w-80 flex flex-col">
       <div class="flex-1">
         <input
+          (input)="onSearchInputChange($event)"
           id="search"
           name="search"
           type="text"
@@ -28,6 +29,7 @@
         </div>
       </div>
       <button
+        (click)="openModal()"
         type="button"
         class="my-4 py-4 px-6 bg-blue-600 hover:bg-blue-800 text-sm text-gray-50 font-bold rounded-xl transition duration-200"
       >
@@ -36,3 +38,11 @@
     </section>
   </div>
 </main>
+
+<app-modal
+  [showModal]="showModal"
+  title="Agregar palabra"
+  (closeModal)="closeModal()"
+>
+  <app-form-word (onSubmitEmitter)="onSubmitCreate($event)"></app-form-word>
+</app-modal>

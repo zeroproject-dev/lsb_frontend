@@ -12,6 +12,8 @@
       [ngClass]="{ 'border-red-500': isInvalid }"
       (input)="onInput($event)"
       [defaultValue]="value"
+      [value]="value"
+      [readonly]="readonly"
     />
   </div>
 </div>

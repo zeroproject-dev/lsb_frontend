@@ -19,6 +19,7 @@
           >* El primer nombre es requerido
         </small>
       </div>
+
       <app-textfield
         class="flex-1"
         [isInvalid]="false"
@@ -88,10 +89,12 @@
         </small>
       </div>
 
-      <label for="role">
+      <label for="role" class="block">
         Selecciona un rol:
         <select id="role" name="role" formControlName="role">
-          <option value="1">Admin</option>
+          <option *ngFor="let role of roles" [value]="role.id">
+            {{ role.name }}
+          </option>
         </select>
       </label>
 
@@ -133,6 +136,11 @@
     </div>
   </div>
   <div class="flex flex-row-reverse px-6">
-    <button class="" type="submit">Guardar cambios</button>
+    <button
+      class="mt-4 bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
+      type="submit"
+    >
+      Guardar cambios
+    </button>
   </div>
 </form>
