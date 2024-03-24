@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { UsersService } from 'src/app/services/users.service';
-import { TOKEN_STORAGE_KEY } from 'src/app/utils/constants';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-menu',
@@ -10,13 +9,10 @@ import { TOKEN_STORAGE_KEY } from 'src/app/utils/constants';
 export class MenuComponent {
   isMenuOpen: boolean = false;
 
-  constructor(
-    private router: Router,
-    private usersService: UsersService,
-  ) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   get isLoged() {
-    return this.usersService.getIsLoged();
+    return this.authService.isLoggedIn();
   }
 
   toggleMenu() {
@@ -24,8 +20,7 @@ export class MenuComponent {
   }
 
   logout() {
-    this.usersService.setIsLoged(false);
-    localStorage.removeItem(TOKEN_STORAGE_KEY);
+    this.authService.logout();
     this.router.navigate(['./']);
   }
 }

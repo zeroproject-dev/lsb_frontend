@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/models/user';
+import { AuthService } from 'src/app/services/auth.service';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -16,9 +17,9 @@ export class ConfirmComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private userService: UsersService,
+    private authService: AuthService,
     private router: Router,
-    private formBuilder: FormBuilder,
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit() {
@@ -38,7 +39,7 @@ export class ConfirmComponent implements OnInit {
         return;
       }
       const id = params['id'];
-      const res = await this.userService.getUser(id);
+      const res = await this.authService.getConfirmationUser(id);
 
       if (!res.data) {
         console.log('No se encontró usuario. Redirigiendo a /');
@@ -64,7 +65,7 @@ export class ConfirmComponent implements OnInit {
       if (this.form.valid) {
         const formData = this.form.value;
         const password = formData['password'];
-        this.userService.sendConfirmation(this.user.id, { password });
+        this.authService.sendConfirmation(this.user.id, { password });
         this.router.navigate(['./login']);
       }
       this.submited = true;

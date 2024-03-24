@@ -33,7 +33,7 @@ export class RolesComponent implements OnInit {
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        switchMap((query: string) => this.rolesService.listRoles(query)),
+        switchMap((query: string) => this.rolesService.list(query))
       )
       .subscribe((obj) => {
         this._listOfRoles = obj.data ?? [];
@@ -51,8 +51,9 @@ export class RolesComponent implements OnInit {
 
   async listOfRoles() {
     try {
-      const res = await this.rolesService.listRoles('');
-      if (res.data === null) {
+      const res = await this.rolesService.list('');
+      if (res.data === null || !res.success) {
+        this.toast.error(res.message, 'Error');
         return;
       }
       this._listOfRoles = res.data;
@@ -72,15 +73,15 @@ export class RolesComponent implements OnInit {
   }
 
   async onSubmit(formValue: any) {
-    const res = await this.rolesService.updateRole({
-      ...formValue,
-      id: this.selectedRole?.id,
-    });
+    const res = await this.rolesService.update(
+      this.selectedRole?.id!,
+      formValue
+    );
 
     this.toast.success(res.message, 'Modificación correcta');
   }
 
   async onSubmitCreate(formValue: any) {
-    console.log(await this.rolesService.createRole(formValue));
+    console.log(await this.rolesService.create(formValue));
   }
 }

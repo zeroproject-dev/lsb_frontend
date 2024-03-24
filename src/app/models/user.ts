@@ -16,6 +16,7 @@ export interface User {
   second_surname: string;
   state: string;
   token: string;
+  expires_at: string;
 }
 
 type permission = 'roles' | 'usuarios' | 'words';

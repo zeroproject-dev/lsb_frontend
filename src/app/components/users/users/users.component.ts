@@ -36,7 +36,7 @@ export class UsersComponent implements OnInit {
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        switchMap((query: string) => this.userService.listUsers(query)),
+        switchMap((query: string) => this.userService.list(query))
       )
       .subscribe((users) => {
         this.users = users.data ?? [];
@@ -50,7 +50,7 @@ export class UsersComponent implements OnInit {
 
   async updateListOfUsers() {
     try {
-      const res = await this.userService.listUsers('');
+      const res = await this.userService.list('');
       if (res.data === null) throw new Error(res.message);
 
       this.users = res.data;
@@ -77,9 +77,9 @@ export class UsersComponent implements OnInit {
   async onSubmit(formValue: any) {
     try {
       formValue['id'] = this.selectedUser.id;
-      const response = await this.userService.updateUser(
+      const response = await this.userService.update(
         this.selectedUser.id,
-        formValue,
+        formValue
       );
       this.updateListOfUsers();
       this.toast.success('', response.message);
@@ -90,7 +90,7 @@ export class UsersComponent implements OnInit {
 
   async onSubmitCreate(formValue: any) {
     try {
-      const response = await this.userService.createUser(formValue);
+      const response = await this.userService.create(formValue);
       this.updateListOfUsers();
       this.toast.success('', response.message);
       this.closeCreateUserModal();

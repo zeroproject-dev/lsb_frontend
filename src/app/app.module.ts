@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/users/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { TextfieldComponent } from './components/shared/textfield/textfield.component';
@@ -22,6 +22,7 @@ import { FormRoleComponent } from './components/roles/form-role/form-role.compon
 import { TrainingComponent } from './components/training/training.component';
 import { FormWordComponent } from './components/dictionary/form-word/form-word.component';
 import { ConfirmComponent } from './components/users/confirm/confirm.component';
+import { AuthInterceptor } from './interceptors/auth';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,13 @@ import { ConfirmComponent } from './components/users/confirm/confirm.component';
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -9,6 +9,7 @@ import {
   inject,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { Role, User } from 'src/app/models/user';
 import { RolesService } from 'src/app/services/roles.service';
 import { UsersService } from 'src/app/services/users.service';
@@ -30,17 +31,17 @@ export class FormCreateUserComponent implements OnInit, OnChanges {
   constructor(
     private formBuilder: FormBuilder,
     private rolesService: RolesService,
+    private toast: ToastrService
   ) {}
 
   async updateListOfRoles() {
     try {
-      const res = await this.rolesService.listRoles('');
+      const res = await this.rolesService.list('');
       if (res.data === null) throw new Error(res.message);
 
       this.roles = res.data;
     } catch (error: any) {
-      // this.toast.error(error.message, 'Error');
-      console.log(error.message);
+      this.toast.error(error.message, 'Error');
     }
   }
 

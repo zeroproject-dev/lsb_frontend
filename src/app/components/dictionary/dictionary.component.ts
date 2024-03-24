@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
+import { ToastrService } from 'ngx-toastr';
 import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { Word } from 'src/app/models/words';
 import { DictionaryService } from 'src/app/services/dictionary.service';
@@ -22,7 +23,7 @@ export class DictionaryComponent implements OnInit {
 
   private searchSubject = new Subject<string>();
 
-  constructor() {
+  constructor(private readonly ts: ToastrService) {
     this.title.setTitle('LSB - Diccionario');
   }
 
@@ -34,7 +35,7 @@ export class DictionaryComponent implements OnInit {
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        switchMap((query: string) => this.dictionaryService.listOfWords(query)),
+        switchMap((query: string) => this.dictionaryService.list(query))
       )
       .subscribe((obj) => {
         this.words = obj.data ?? [];
@@ -48,7 +49,7 @@ export class DictionaryComponent implements OnInit {
 
   async listWords() {
     try {
-      const res = await this.dictionaryService.listOfWords();
+      const res = await this.dictionaryService.list();
       if (res.data === null) {
         return;
       }
@@ -72,6 +73,16 @@ export class DictionaryComponent implements OnInit {
   }
 
   onSubmitCreate(formValue: any) {
-    console.log(formValue);
+    this.isLoading = true;
+    this.dictionaryService
+      .create(formValue)
+      .then(() => {
+        this.listWords();
+        this.closeModal();
+      })
+      .catch((error) => {
+        console.error(error);
+        this.ts.error('Error al crear la palabra', 'Error');
+      });
   }
 }

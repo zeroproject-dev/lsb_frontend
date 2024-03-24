@@ -1,8 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { TOKEN_STORAGE_KEY } from '../utils/constants';
 import { Response } from '../models/user';
 import { firstValueFrom } from 'rxjs';
+import { EnvironmentService } from './environment';
 
 @Injectable({
   providedIn: 'root',
@@ -11,69 +11,38 @@ export class TrainService {
   private baseUrl: string;
 
   http = inject(HttpClient);
+  environmentService = inject(EnvironmentService);
 
   constructor() {
-    this.baseUrl = 'http://18.231.27.17:3300/api/v1';
+    this.baseUrl = this.environmentService.apiUrl;
   }
 
   train() {
-    const token = localStorage.getItem(TOKEN_STORAGE_KEY);
-    if (token === null) {
-      throw new Error('Falta token');
-    }
-
     const res = this.http.post<Response<any>>(
       `${this.baseUrl}/translate/train`,
-      null,
-      {
-        headers: new HttpHeaders().set('Authorization', token),
-      },
+      null
     );
     return firstValueFrom(res);
   }
 
   checkStatus() {
-    const token = localStorage.getItem(TOKEN_STORAGE_KEY);
-    if (token === null) {
-      // throw new Error('Falta token');
-    }
-
     const res = this.http.get<Response<any>>(
-      `${this.baseUrl}/translate/status`,
-      {
-        headers: new HttpHeaders().set('Authorization', token ?? ''),
-      },
+      `${this.baseUrl}/translate/status`
     );
     return firstValueFrom(res);
   }
 
   updateService(formValue: any) {
-    const token = localStorage.getItem(TOKEN_STORAGE_KEY);
-    if (token === null) {
-      // throw new Error('Falta token');
-    }
-
     const res = this.http.post<Response<any>>(
       `${this.baseUrl}/translate/service-link`,
-      formValue,
-      {
-        headers: new HttpHeaders().set('Authorization', token ?? ''),
-      },
+      formValue
     );
     return firstValueFrom(res);
   }
 
   getService() {
-    const token = localStorage.getItem(TOKEN_STORAGE_KEY);
-    if (token === null) {
-      // throw new Error('Falta token');
-    }
-
     const res = this.http.get<Response<any>>(
-      `${this.baseUrl}/translate/service-link`,
-      {
-        headers: new HttpHeaders().set('Authorization', token ?? ''),
-      },
+      `${this.baseUrl}/translate/service-link`
     );
     return firstValueFrom(res);
   }

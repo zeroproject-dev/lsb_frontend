@@ -4,8 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/services/auth.service';
 import { UsersService } from 'src/app/services/users.service';
-import { TOKEN_STORAGE_KEY } from 'src/app/utils/constants';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
   router = inject(Router);
   title = inject(Title);
   toast = inject(ToastrService);
+  authService = inject(AuthService);
   submited = false;
 
   constructor(private formBuilder: FormBuilder) {
@@ -36,13 +37,7 @@ export class LoginComponent implements OnInit {
       this.submited = true;
       if (!this.form.valid) return;
 
-      const res = await this.userService.login(this.form.value);
-      if (res.data === null) {
-        this.toast.error(res.message, 'Error');
-        return;
-      }
-      localStorage.setItem(TOKEN_STORAGE_KEY, res.data.token);
-      this.userService.setIsLoged(true);
+      await this.authService.login(this.form.value);
       this.router.navigate(['./']);
     } catch (error) {
       if (error instanceof HttpErrorResponse) {
