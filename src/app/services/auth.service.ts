@@ -61,7 +61,9 @@ export class AuthService {
   }
 
   public isLoggedIn() {
-    return this.getExpiration();
+    if (this.getExpiration() === null) return false;
+
+    return this.getExpiration() && dayjs().isBefore(this.getExpiration());
   }
 
   isLoggedOut() {
@@ -69,8 +71,10 @@ export class AuthService {
   }
 
   getExpiration() {
-    const expiration =
-      localStorage.getItem(this.environmentService.tokenStorageKey) ?? '{}';
+    const expiration = localStorage.getItem(
+      this.environmentService.tokenStorageKey
+    );
+    if (!expiration) return null;
     const expiresAt = JSON.parse(expiration);
     return dayjs(expiresAt.expires_at);
   }

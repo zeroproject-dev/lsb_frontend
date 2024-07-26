@@ -20,7 +20,10 @@ export class TrainingComponent implements OnInit {
 
   training = false;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private readonly ts: ToastrService
+  ) {
     this.title.setTitle('LSB - Actualizar datos');
   }
 
@@ -31,7 +34,7 @@ export class TrainingComponent implements OnInit {
     interval(60000)
       .pipe(
         startWith(0),
-        switchMap(() => this.checkStatus()),
+        switchMap(() => this.checkStatus())
       )
       .subscribe();
     await this.getService();
@@ -43,9 +46,12 @@ export class TrainingComponent implements OnInit {
   }
 
   async startTraining() {
-    const res = await this.trainService.train();
-    await this.checkStatus();
-    this.toast.success(res.message, 'Activado');
+    try {
+      await this.trainService.train();
+      await this.checkStatus();
+    } catch (error) {
+      this.ts.error('Error al iniciar el entrenamiento', 'Error');
+    }
   }
 
   async checkStatus() {
@@ -61,6 +67,12 @@ export class TrainingComponent implements OnInit {
         break;
       case 2:
         this.status = 'Entrenamiento finalizado';
+        this.ts.success('Entrenamiento finalizado', 'Completado');
+        this.training = false;
+        break;
+      case 3:
+        this.status = 'Error al iniciar el entrenamiento';
+        this.ts.error('Error al iniciar el entrenamiento', 'Error');
         this.training = false;
         break;
       default:

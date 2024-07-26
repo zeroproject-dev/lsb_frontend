@@ -23,6 +23,7 @@ import { TrainingComponent } from './components/training/training.component';
 import { FormWordComponent } from './components/dictionary/form-word/form-word.component';
 import { ConfirmComponent } from './components/users/confirm/confirm.component';
 import { AuthInterceptor } from './interceptors/auth';
+import { FormatDatePipe } from './pipes/format-date.pipe';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { AuthInterceptor } from './interceptors/auth';
     TrainingComponent,
     FormWordComponent,
     ConfirmComponent,
+    FormatDatePipe,
   ],
   imports: [
     BrowserModule,
